@@ -2,21 +2,21 @@ use crate::Operation;
 use crate::config::Config;
 
 
-pub struct Squeeze
+pub struct Squeeze<'config>
 {
-    config: Config,
-    next: Option<Box<dyn Operation>>,
+    config: &'config Config,
+    next: Option<Box<dyn Operation<'config> + 'config>>,
 }
 
-impl Squeeze
+impl<'config> Squeeze<'config>
 {
-    pub fn new(config: Config, next: Option<Box<dyn Operation>>) -> Self {
+    pub fn new(config: &'config Config, next: Option<Box<dyn Operation<'config> + 'config>>) -> Self {
         Squeeze { config, next }
     }
 }
 
 
-impl Operation for Squeeze
+impl<'config> Operation<'config> for Squeeze<'config>
 {
     fn handle(&self, contents: String) -> String {
         let mut buffer: String = String::new();
@@ -54,7 +54,7 @@ impl Operation for Squeeze
         }
     }
 
-    fn next(&mut self) -> &mut Option<Box<dyn Operation>> {
+    fn next(&mut self) -> &mut Option<Box<dyn Operation<'config> + 'config>> {
         &mut self.next
     }
 }

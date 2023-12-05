@@ -1,20 +1,20 @@
 use crate::Operation;
 use crate::config::Config;
 
-pub struct NumberNonBlankLines {
-    config: Config,
-    next: Option<Box<dyn Operation>>,
+pub struct NumberNonBlankLines<'config> {
+    config: &'config Config,
+    next: Option<Box<dyn Operation<'config> + 'config>>,
 }
 
-impl NumberNonBlankLines
+impl<'config> NumberNonBlankLines<'config>
 {
-    pub fn new(config: Config, next: Option<Box<dyn Operation>>) -> Self {
+    pub fn new(config: &'config Config, next: Option<Box<dyn Operation<'config> + 'config>>) -> Self {
         NumberNonBlankLines { config, next }
     }
 }
 
 
-impl Operation for NumberNonBlankLines
+impl<'config> Operation<'config> for NumberNonBlankLines<'config>
 {
     fn handle(&self, contents: String) -> String {
         let mut buffer: String = String::new();
@@ -51,7 +51,7 @@ impl Operation for NumberNonBlankLines
         }
     }
 
-    fn next(&mut self) -> &mut Option<Box<dyn Operation>> {
+    fn next(&mut self) -> &mut Option<Box<dyn Operation<'config> + 'config>> {
         &mut self.next
     }
 }

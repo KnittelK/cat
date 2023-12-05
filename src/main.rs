@@ -33,9 +33,9 @@ struct Cat {
 impl Cat {
     pub fn run(&self) {
         let config = Config::new(self.b, self.s, self.n);
-        let number_lines: Option<Box<dyn Operation>> = Some(Box::new(NumberLines::new(config.clone(), None)));
-        let number_non_blank_lines: Option<Box<dyn Operation>> = Some(Box::new(NumberNonBlankLines::new(config.clone(), number_lines)));
-        let mut squeeze = Squeeze::new(config.clone(), number_non_blank_lines);
+        let number_lines: Option<Box<dyn Operation>> = Some(Box::new(NumberLines::new(&config, None)));
+        let number_non_blank_lines: Option<Box<dyn Operation>> = Some(Box::new(NumberNonBlankLines::new(&config, number_lines)));
+        let mut squeeze = Squeeze::new(&config, number_non_blank_lines);
 
         let mut output: String = String::new();
         for file_name in self.files.iter() {
